@@ -17,17 +17,26 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   userInfo: {
-    location: String,
+    location: {
+      type: String,
+      required: false,
+    },
     name: {
       type: String,
       required: true,
     },
     dateOfBirth: {
       type: Date,
-      required: true,
+      required: false,
     },
-    description: String,
-    phone: Number,
+    description: {
+      type: String,
+      required: false,
+    },
+    phone: {
+      type: String,
+      required: false,
+    },
   },
   followers: [
     {
@@ -41,12 +50,12 @@ const userSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  pending: [{
-    type: mongoose.Schema.
-    Types.ObjectId,
-    ref: "User",
-  },
-],
+  pending: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   profileType: {
     type: String,
     enum: ["Private", "Public"],

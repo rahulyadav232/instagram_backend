@@ -1,5 +1,9 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
+const origin = ["http://localhost:5173"];
 
 const PORT = 3001;
 
@@ -22,6 +26,9 @@ const postRoutes = require("./routes/posts");
 const commentRoutes = require("./routes/comments");
 const likeRoutes = require("./routes/likes");
 
+app.use(cors({ origin, credentials: true }));
+app.use(cookieParser());
+
 app.use(express.json()); // for parsing application/json
 
 app.use("/users", userRoutes);
@@ -29,10 +36,15 @@ app.use("/posts", postRoutes);
 app.use("/comments", commentRoutes);
 app.use("/likes", likeRoutes);
 
+app.get("/check", (req, res) => {
+  console.log(req.cookies);
+  res.send("ok");
+});
+
 // -------------------ROUTES-------------------------
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Instagram Clone API");
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

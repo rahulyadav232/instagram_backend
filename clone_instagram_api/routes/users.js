@@ -13,35 +13,43 @@ const {
   unfollow,
   changeRequestStatus,
 } = require("../controllers/userController");
-
 const authenticate = require("../middleware/auth");
 
 // login
 router.post("/login", login);
 
+// verify user
+router.get("/verify", authenticate, (req, res) => {
+  res.status(200).json({ success: true, message: "verified", user: req.user });
+});
+
+router.post("/logout", (req, res) => {
+  // delete cookie
+  res.clearCookie("jwt");
+  res.status(200).json({ success: true, message: "logged out" });
+});
 // signup
 router.post("/signup", signup);
 
 // get profile
-router.get("/profile", authenticate, getProfile);
+router.get("/profile", getProfile);
 
 // update profile
-router.put("/profile", authenticate, updateProfile);
+router.put("/profile", updateProfile);
 
 // delete profile
-router.delete("/profile", authenticate, deleteProfile);
+router.delete("/profile", deleteProfile);
 
 // change profile type
-router.put("/type/:isPrivate", authenticate, changeProfileType);
+router.put("/type/:isPrivate", changeProfileType);
 
 // to follow someone
-router.put("/follow/:id", authenticate, follow);
+router.put("/follow/:id", follow);
 
 // to unfollow someone
-router.put("/unfollow/:id", authenticate, unfollow);
+router.put("/unfollow/:id", unfollow);
 
-// to change status of follow request 
-router.put("/request", authenticate, changeRequestStatus);
-
+// to change status of follow request
+router.put("/request", changeRequestStatus);
 
 module.exports = router;

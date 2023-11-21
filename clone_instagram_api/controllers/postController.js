@@ -8,19 +8,27 @@ const { successResponse, failureResponse } = require("./utils");
 //get this id from token after logging in
 // const MY_ID = "651bc49b15918bbec8c7ceec"; // this is Yogini id
 // const MY_ID = "651bc45015918bbec8c7cee8"; // this is Rahul's id
-// const MY_ID = "651fca83d6296e155c186287"; // risit id
+const MY_ID = "651fca83d6296e155c186287"; // risit id
 
 const createPost = async (req, res) => {
   try {
-    let { contentUrl, description, tags } = req.body;
-    let userId = MY_ID; // fetch from the token through req.user._id;
-    await Post.create({
+    const { contentUrl, description, tags } = req.body;
+    const userId = req.user.user._id;
+
+    const post = await Post.create({
       contentUrl,
       description,
       tags,
       userId,
     });
-    successResponse(res, "Post created successfully");
+    successResponse(
+      res,
+      {
+        message: "Post created successfully",
+        post,
+      },
+      201
+    );
   } catch (error) {
     console.log(error);
     failureResponse(res, error);
@@ -63,6 +71,26 @@ const updatePost = async (req, res) => {
     }
   } catch (error) {
     failureResponse(res, error);
+  }
+};
+
+const getAllPost = async (req, res) => {
+  try {
+    // const { following } = req.user.user; // ["id1", "id2", "id3"]
+
+    // const posts = await Post.find({ userId: { $in: following } }).populate({
+    //   path: "userId",
+    //   select: "-password",
+    // });
+
+    const post = await Post.find().populate({
+      path: "userId",
+      select: "-password",
+    });
+
+    successResponse(res, post);
+  } catch (e) {
+    failureResponse(res, e);
   }
 };
 
@@ -155,4 +183,5 @@ module.exports = {
   deletePost,
   updatePost,
   userNewsFeed,
+  getAllPost,
 };

@@ -5,7 +5,8 @@ const {
   createPost,
   deletePost,
   updatePost,
-  userNewsFeed
+  userNewsFeed,
+  getAllPost,
 } = require("../controllers/postController");
 
 const authtication = require("../middleware/auth");
@@ -20,6 +21,6 @@ router.put("/", authtication, updatePost);
 router.delete("/", authtication, deletePost);
 
 // User News Feed
-router.get("/", authtication, userNewsFeed);
+router.get("/", authtication, getAllPost);
 
 module.exports = router;
